@@ -406,12 +406,21 @@ program langevin
 
      fax = 0.0d0; fay = 0.0d0; faz = 0.0d0
 
-     do i = 1,n-1
+     dx1 = x(2)-x(n); dy1 = y(2)-y(n); dz1 = z(2)-z(n)
+     dx1 = dx1 - box * anint(dx1/box) - box * anint(dy1/box)
+     dy1 = dy1 - box * anint(dy1/box)
+     dz1 = dz1 - box * anint(dz1/box)
+     dr1 = dsqrt(dx1**2 + dy1**2 + dz1**2)
+     fax(1) = fax(1) + ft*(dx1/dr1)
+     fay(1) = fay(1) + ft*(dy1/dr1)
+     faz(1) = faz(1) + ft*(dz1/dr1)
+
+     do i = 2,n-1
  
         dx = x(i+1) - x(i-1)
         dy = y(i+1) - y(i-1)
         dz = z(i+1) - z(i-1)
-        dx = dx - box * anint(dx / box)
+        dx = dx - box * anint(dx / box) - box * anint(dy/box)
         dy = dy - box * anint(dy / box)
         dz = dz - box * anint(dz / box)
         dr = sqrt(dx**2 + dy**2 + dz**2)
@@ -422,7 +431,7 @@ program langevin
       end do
 
       dxn = x(1)-x(n-1); dyn = y(1)-y(n-1); dzn = z(1)-z(n-1)
-      dxn = dxn - box * anint(dxn / box)
+      dxn = dxn - box * anint(dxn / box) - box * anint(dyn/box)
       dyn = dyn - box * anint(dyn / box)
       dzn = dzn - box * anint(dzn / box)
       drn = sqrt(dxn**2 + dyn**2 + dzn**2)
