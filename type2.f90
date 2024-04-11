@@ -406,7 +406,15 @@ program langevin
 
      fax = 0.0d0; fay = 0.0d0; faz = 0.0d0; l=5.0d0 ! l is 2*bondlength
 
-     do i = 1,n-1
+     dx1 = x(2)-x(n); dy1 = y(2)-y(n); dz1 = z(2)-z(n)
+     dx1 = dx1 - box* anint(dx1/box) - box * anint(dy1/box)
+     dy1 = dy1 - box * anint(dy1/box)
+     dz1 = dz1 - box * anint(dz1/box)
+     fax(1) = fax(1) + ft*(dx1/l)
+     fay(1) = fay(1) + ft*(dy1/l)
+     faz(1) = faz(1) + ft*(dz1/l)
+
+     do i = 2,n-1
  
         dx = x(i+1) - x(i-1)
         dy = y(i+1) - y(i-1)
